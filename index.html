@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+  <style>
+    :root{
+      --bg1:#ffdee9; --bg2:#b5fffc;
+      --card: rgba(255,255,255,.78);
+      --shadow: 0 20px 60px rgba(0,0,0,.12);
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0; min-height:100vh;
+      display:flex; align-items:center; justify-content:center;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans TC",Arial,sans-serif;
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      overflow:hidden;
+    }
+    .wrap{ width:min(560px, 92vw); }
+    .card{
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 26px 22px;
+      text-align:center;
+      position:relative;
+    }
+    .hidden{ display:none; }
+
+    /* env */
+    .envelope-area{
+      height: 360px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+    }
+    .envelope{
+      width: 400px;
+      max-width: 92%;
+      height: 340px;
+      position:relative;
+      cursor:pointer;
+      transform: translateY(0);
+      transition: transform .18s ease;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .envelope:active{ transform: translateY(1px) scale(.99); }
+
+    .env-body{
+      position:absolute; inset:0;
+      border-radius: 18px;
+      background: rgba(255, 192, 203, .9);
+      box-shadow: 0 14px 34px rgba(0,0,0,.12);
+      overflow:hidden;
+    }
+    /* env flap */
+    .env-flap{
+      position:absolute; left:0; right:0; top:0;
+      height: 55%;
+      background: rgba(255,182,193,.95);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top center;
+      transition: transform .55s ease;
+      border-radius: 18px 18px 0 0;
+    }
+    .env-open .env-flap{ transform: rotateX(165deg); }
+
+    /* env button */
+    .env-left, .env-right{
+      position:absolute; bottom:0; width: 55%; height: 65%;
+      background: rgba(255,200,210,.95);
+      clip-path: polygon(0 0, 100% 50%, 0 100%);
+      opacity:.9;
+    }
+    .env-left{ left:0; }
+    .env-right{
+      right:0;
+      transform: scaleX(-1);
+    }
+    .env-bottom{
+      position:absolute; left:0; right:0; bottom:0;
+      height: 52%;
+      background: rgba(255,170,190,.95);
+      clip-path: polygon(0 100%, 50% 0, 100% 100%);
+      opacity:.95;
+    }
+
+    /* card */
+    .pull-card{
+      position:absolute;
+      width: 86%;
+      height: 100%;
+      left: 7%;
+      bottom: 1%;
+      border-radius: 16px;
+      background: rgba(255,255,255,.95);
+      box-shadow: 0 16px 40px rgba(0,0,0,.14);
+      transform: translateY(25%);
+      opacity: 0;
+      transition: transform .65s ease, opacity .45s ease;
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+    }
+    .env-open .pull-card{
+      transform: translateY(-22%);
+      opacity: 1;
+    }
+    .pull-top{
+      font-family: "Great Vibes", cursive;
+      padding: 14px 14px 1px;
+      font-weight: 300;
+      letter-spacing:.2px;
+      font-size: 25px;
+      color: #c2185b;
+    }
+    .pull-photo{
+  padding: 0 14px 14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.pull-photo img{
+  width: 100%;
+  height: auto;            
+  max-width: 340px;       
+  max-height: 260px;       
+  object-fit: contain;     
+  border-radius: 14px;
+  background: #ffe6ee;
+  display:block;
+}
+
+
+    .hint{
+      opacity:.75;
+      margin-top: 10px;
+      font-size: 13px;
+    }
+
+    /* env disappear */
+    .fade-out{
+      animation: fadeOut .55s ease forwards;
+    }
+    @keyframes fadeOut{
+      to { opacity:0; transform: translateY(16px) scale(.98); }
+    }
+
+    /* letter info */
+    h1{
+  font-family: "Great Vibes", cursive;
+  font-size: 42px;
+  font-weight: 400;
+  margin: 6px 0 14px;
+  color: #c2185b;
+}
+
+    .letter{
+  font-family: "Playfair Display", serif;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+    .sig{ margin-top: 16px; opacity:.9; }
+
+    .btn{
+      border:0;
+      padding: 12px 18px;
+      border-radius: 999px;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(0,0,0,.12);
+      transition: transform .12s ease;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:active{ transform: translateY(1px) scale(.99); }
+    .primary{ background:#ff4d7d; color:white; }
+    .ghost{
+      background: rgba(255,255,255,.9);
+      border: 2px solid rgba(0,0,0,.08);
+      color:#333;
+    }
+    .center-actions{ display:flex; justify-content:center; margin-top: 16px; }
+
+    /* Yes or No*/
+    .stage{
+      position: relative;
+      height: 180px;
+      width: 100%;
+      border-radius: 18px;
+      background: rgba(255,255,255,.55);
+      overflow: hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-top: 10px;
+    }
+    .yes-wrap{
+      position:absolute;
+      left: 35%;
+      top: 55%;
+      transform: translate(-50%, -50%);
+    }
+    .no{
+      position:absolute;
+      left: 58%;
+      top: 55%;
+      transform: translate(-50%, -50%);
+    }
+
+    .yay{
+      font-size: 34px;
+      margin: 10px 0 6px;
+    }
+    .heart{
+      font-size: 42px;
+      animation: pop 1s ease-in-out infinite;
+      display:inline-block;
+      margin: 6px 0 0;
+    }
+    @keyframes pop{
+      0%,100%{ transform: scale(1); }
+      50%{ transform: scale(1.12); }
+    }
+
+    
+.final-letter{
+  font-family: "Playfair Display", serif; 
+  font-size: 17px;
+  line-height: 1.7;
+  text-align: left;
+  margin: 14px 8px 10px;
+  opacity: 0;               
+  transform: translateY(8px);
+}
+
+
+.final-letter.show{
+  animation: fadeUp 1.8s ease forwards;
+}
+
+@keyframes fadeUp{
+  to{
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cat-anim{
+  display: flex;
+  justify-content: center;
+  margin: 12px 0;
+}
+
+.cat-anim lottie-player{
+  width: 200px;   
+  height: 200px;
+}
+
+
+.pull-photo{
+  padding: 14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.polaroid{
+  width: 240px;
+  aspect-ratio: 3 / 4;      
+  background:#fff;
+  padding: 14px;            
+  border-radius: 10px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.18), 0 4px 8px rgba(0,0,0,.12);
+  transform: rotate(-2deg);
+  display:flex;
+}
+
+.polaroid img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;      
+  border-radius: 8px;
+  display:block;
+  background:#fff;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
+}
+
+
+
+
+
+
+
+  </style>
+</head>
+
+<body>
+
+
+
+  <div class="wrap">
+
+    <!-- Screen 0 envelop -->
+    <div class="card" id="screen0">
+      <h1>Open it 💌</h1>
+      <div class="envelope-area">
+        <div class="envelope" id="env">
+          <div class="env-body"></div>
+          <div class="env-flap"></div>
+          <div class="env-left"></div>
+          <div class="env-right"></div>
+          <div class="env-bottom"></div>
+
+          <div class="pull-card" id="pullCard">
+            <div class="pull-top">For Em</div>
+            <div class="pull-photo">
+            <div class="polaroid">
+              <img
+                id="herPhoto"
+                src="Em.jpg"
+                alt="photo"
+              />
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+
+    <!-- Screen 1: env content -->
+    <div class="card hidden" id="screen1">
+      <h1>To my love</h1>
+      <div class="letter">
+        <div><b>Dear Em Be,</b></div>
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
+        <div style="margin-top:10px;">
+            <p>
+                I just wanted to take a moment to tell you how much you truly mean to me.
+                Being with you always makes me feel happy, calm, and completely at ease.
+              </p>
+          
+              <p>
+                I love the way you smile~ your beautiful moon like eyes never leave my mind.
+                <br> And your thoughtful and caring heart means everything to me.
+              </p>
+          
+              <p>
+                Before this day goes any further, I want you to know how much it would mean
+                to me to spend Valentine’s Day with you.
+              </p>
+          
+              <p>
+                I know you’re overseas right now, and I’m sorry that we can’t be together
+                at the right time.
+              </p>
+          
+              <p>
+                But I promise you~  when you come back to Sydney,
+                I’ll take you to beautiful places, share amazing food with you,
+                and create a Valentine’s Day that belongs only to us.🥰
+              </p>
+          
+              <p>
+                So with all my heart, I have one simple question...<br>
+                  I’ve been wanting to ask you...
+                
+                
+              </p>
+        </div>
+        <div class="sig">— En En</div>
+      </div>
+
+      <div class="center-actions">
+        <button class="btn primary" id="continueBtn">Continue ➜</button>
+      </div>
+    </div>
+
+    <!-- Screen 2: question + Yes/No -->
+    <div class="card hidden" id="screen2">
+      <h1>Would you be my Valentine? 💌</h1>
+    
+      <div class="stage" id="stage">
+        <div class="yes-wrap">
+          <button class="btn primary" id="yesBtn">Yes 😳</button>
+        </div>
+        <button class="btn ghost no" id="noBtn">No 🙃</button>
+      </div>
+     
+    </div>
+
+    <!-- Screen 3: result -->
+    <div class="card hidden" id="screen3">
+          
+      <h1>Yayy!! I love U Emm 💖</h1>
+      <div class="cat-anim">
+        <lottie-player
+          src="love.json"
+          background="transparent"
+          speed="1"
+          loop
+          autoplay>
+        </lottie-player>
+      </div>
+      
+      <p class="final-letter reveal" id="finalMsg">
+        I'm really looking forward to spending Valentine's Day with you🥹 Having you as my Valentine is what truly matters🥰
+      </p>
+      <div class="heart">💘</div>
+    </div>
+    <div class="heart-tree">
+        <div class="trunk"></div>
+        <div class="leaves" id="leaves"></div>
+      </div>
+      
+
+  </div>
+
+  <script>
+    const screen0 = document.getElementById('screen0');
+    const screen1 = document.getElementById('screen1');
+    const screen2 = document.getElementById('screen2');
+    const screen3 = document.getElementById('screen3');
+
+    const env = document.getElementById('env');
+    const continueBtn = document.getElementById('continueBtn');
+
+    const stage = document.getElementById('stage');
+    const noBtn = document.getElementById('noBtn');
+    const yesBtn = document.getElementById('yesBtn');
+
+    let opened = false;
+
+   
+    env.addEventListener('click', () => {
+      if(opened) return;
+      opened = true;
+
+      env.classList.add('env-open');
+
+      
+      setTimeout(() => {
+        // env out
+        screen0.classList.add('fade-out');
+
+        // next screen
+        setTimeout(() => {
+          screen0.classList.add('hidden');
+          screen0.classList.remove('fade-out');
+          screen1.classList.remove('hidden');
+        }, 560);
+      }, 3000); // phto tim,e
+    });
+
+    // Continue -> entre Yes/No screen
+    continueBtn.addEventListener('click', () => {
+      screen1.classList.add('hidden');
+      screen2.classList.remove('hidden');
+      moveNoButton(); 
+    });
+
+    //  No 
+    function moveNoButton(){
+      const stageRect = stage.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+      const padding = 12;
+
+      const maxX = stageRect.width - btnRect.width - padding;
+      const maxY = stageRect.height - btnRect.height - padding;
+
+      const x = Math.random() * maxX + padding;
+      const y = Math.random() * maxY + padding;
+
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+      noBtn.style.transform = "translate(0,0)";
+    }
+
+    // destop
+    noBtn.addEventListener('mouseenter', moveNoButton);
+
+    // phone
+    noBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      moveNoButton();
+    }, { passive:false });
+
+    // run
+    noBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      moveNoButton();
+    });
+
+    // Yes -> last screen
+    yesBtn.addEventListener('click', () => {
+      screen2.classList.add('hidden');
+      screen3.classList.remove('hidden');
+      confettiHearts();
+      const finalMsg = document.getElementById('finalMsg');
+  finalMsg.classList.remove('show'); 
+  requestAnimationFrame(() => {
+    finalMsg.classList.add('show');
+  });
+    });
+
+    function confettiHearts(){
+      const count = 18;
+      for(let i=0;i<count;i++){
+        const s = document.createElement('div');
+        s.textContent = Math.random() > 0.5 ? "💖" : "💘";
+        s.style.position = "fixed";
+        s.style.left = (Math.random()*100) + "vw";
+        s.style.top = "-10vh";
+        s.style.fontSize = (18 + Math.random()*22) + "px";
+        s.style.transition = "transform 1.8s linear, top 1.8s linear, opacity 1.8s linear";
+        document.body.appendChild(s);
+
+        requestAnimationFrame(() => {
+          s.style.top = "110vh";
+          s.style.transform =
+            `translateX(${(Math.random()*2-1)*25}vw) rotate(${(Math.random()*2-1)*120}deg)`;
+          s.style.opacity = "0";
+        });
+
+        setTimeout(() => s.remove(), 2000);
+      }
+    }
+  </script>
+</body>
+</html>
